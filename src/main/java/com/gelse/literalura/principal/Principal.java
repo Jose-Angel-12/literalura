@@ -2,10 +2,14 @@ package com.gelse.literalura.principal;
 
 import com.gelse.literalura.model.Datos;
 import com.gelse.literalura.model.DatosLibros;
+import com.gelse.literalura.model.Libros;
 import com.gelse.literalura.service.ConsumoApi;
 import com.gelse.literalura.service.ConvierteDatos;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
     private static final String URL_BASE = "https://gutendex.com/books/";
@@ -18,7 +22,7 @@ public class Principal {
         var opcion = -1;
         while (opcion != 0) {
             var menu = "\n" + """
-                    1 - Buscar Libros 
+                    1 - Buscar Libros
                     
                     0 - Salir
                     """;
@@ -41,7 +45,31 @@ public class Principal {
 
     }
 
-    private void buscarLibro() {
+    private Optional<DatosLibros> getDatosLibros() {
+        System.out.println("Escriba el nombre del libro que desea buscar");
+        String tituloLibro = teclado.nextLine();
+        //obtengo los datos de la api
+        String json = consumoApi.obtenerDatosApi(URL_BASE + "?Search=" + tituloLibro.replace(" ", "+"));
+        // System.out.println(json);
+        Datos datos = convierteDatos.obtenerDatos(json, Datos.class);
+//        System.out.println(datos);
+        //busco el libro digitado
+        Optional<DatosLibros> libroBuscado = datos.resultados().stream()
+                .filter(l -> l.titulo().toUpperCase().contains(tituloLibro.toUpperCase()))
+                .findFirst();
+        if (libroBuscado.isPresent()) {
+            System.out.println("Libro encontrado:");
+//            System.out.println(libroBuscado);
+        } else {
+            System.out.println("Libro no encontrado");
+        }
+        return libroBuscado;
+    }
 
+    private void buscarLibro(){
+        DatosLibros datosLibros = getDatosLibros().get();
+        Libros libros = new Libros(datosLibros);
+
+        System.out.println(libros);
     }
 }
