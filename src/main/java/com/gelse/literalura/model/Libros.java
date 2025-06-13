@@ -4,16 +4,17 @@ import java.util.List;
 
 public class Libros {
     private String titulo;
-    private List<DatosAutor> autor;
-    private List<String> idiomas;
+    private String autor;
+    private String idiomas;
     private Double descargas;
 
-    public Libros(){}
+    public Libros() {
+    }
 
-    public Libros(DatosLibros datosLibros){
+    public Libros(DatosLibros datosLibros) {
         this.titulo = datosLibros.titulo();
-        this.autor = datosLibros.datosAutor();
-        this.idiomas = datosLibros.idiomas();
+        //this.autor = datosLibros.datosAutor().stream().map(a -> new DatosAutor(a.nombre(), a.fechaDeNacimeinto()));
+        this.idiomas = datosLibros.idiomas().get(0);
         this.descargas = datosLibros.descargas();
     }
 
@@ -26,19 +27,17 @@ public class Libros {
         this.titulo = titulo;
     }
 
-    public List<DatosAutor> getAutor() {
+    public String getAutor() {
         return autor;
     }
 
-    public void setAutor(List<DatosAutor> autor) {
-        this.autor = autor;
-    }
+    public void setAutor(String autor) {this.autor = autor; }
 
-    public List<String> getIdiomas() {
+    public String getIdiomas() {
         return idiomas;
     }
 
-    public void setIdiomas(List<String> idiomas) {
+    public void setIdiomas(String idiomas) {
         this.idiomas = idiomas;
     }
 
