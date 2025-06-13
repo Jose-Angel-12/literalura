@@ -13,7 +13,7 @@ public class Libros {
 
     public Libros(DatosLibros datosLibros) {
         this.titulo = datosLibros.titulo();
-        //this.autor = datosLibros.datosAutor().stream().map(a -> new DatosAutor(a.nombre(), a.fechaDeNacimeinto()));
+        this.autor = datosLibros.datosAutor().get(0).nombre();
         this.idiomas = datosLibros.idiomas().get(0);
         this.descargas = datosLibros.descargas();
     }
@@ -31,7 +31,9 @@ public class Libros {
         return autor;
     }
 
-    public void setAutor(String autor) {this.autor = autor; }
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
 
     public String getIdiomas() {
         return idiomas;
@@ -51,9 +53,13 @@ public class Libros {
 
     @Override
     public String toString() {
-        return "Titulo: " + titulo +
-                "Autores: " + autor +
-                "Idiomas: " + idiomas +
-                "Descargas: " + descargas;
+        return """
+                ------ LIBRO ------
+                  Titulo: %s   
+                  Autores: %s 
+                  Idiomas: %s  
+                  Descargas: %s
+                -------------------
+                """.formatted(titulo, autor, idiomas, descargas);
     }
 }

@@ -22,7 +22,9 @@ public class Principal {
         var opcion = -1;
         while (opcion != 0) {
             var menu = "\n" + """
-                    1 - Buscar Libros
+                    --------------------------------------
+                    Elija una opción a través de su número:
+                    1 - Buscar libro por titulo 
                     
                     0 - Salir
                     """;
@@ -58,7 +60,8 @@ public class Principal {
                 .filter(l -> l.titulo().toUpperCase().contains(tituloLibro.toUpperCase()))
                 .findFirst();
         if (libroBuscado.isPresent()) {
-            System.out.println("Libro encontrado:");
+            System.out.println("\n");
+            // System.out.println("Libro encontrado:");
 //            System.out.println(libroBuscado);
         } else {
             System.out.println("Libro no encontrado");
