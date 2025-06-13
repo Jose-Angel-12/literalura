@@ -18,7 +18,12 @@ public class Principal {
     private Scanner teclado = new Scanner(System.in);
 
     public void muestraElMenu() {
-
+        /*
+                    2 - Listar libros registrados
+                    3 - Listar autores registrados
+                    4 - Listar autores vivos en un determinado año
+                    5 - Listar libros por idiomas
+        */
         var opcion = -1;
         while (opcion != 0) {
             var menu = "\n" + """
@@ -69,7 +74,7 @@ public class Principal {
         return libroBuscado;
     }
 
-    private void buscarLibro(){
+    private void buscarLibro() {
         DatosLibros datosLibros = getDatosLibros().get();
         Libros libros = new Libros(datosLibros);
 

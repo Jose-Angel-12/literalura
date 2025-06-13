@@ -4,8 +4,8 @@ import java.util.List;
 
 public class Libros {
     private String titulo;
-    private String autor;
-    private String idiomas;
+    private List<DatosAutor> autor;
+    private List<String> idiomas;
     private Double descargas;
 
     public Libros() {
@@ -13,8 +13,8 @@ public class Libros {
 
     public Libros(DatosLibros datosLibros) {
         this.titulo = datosLibros.titulo();
-        this.autor = datosLibros.datosAutor().get(0).nombre();
-        this.idiomas = datosLibros.idiomas().get(0);
+        this.autor = datosLibros.datosAutor();
+        this.idiomas = datosLibros.idiomas();
         this.descargas = datosLibros.descargas();
     }
 
@@ -27,19 +27,19 @@ public class Libros {
         this.titulo = titulo;
     }
 
-    public String getAutor() {
+    public List<DatosAutor> getAutor() {
         return autor;
     }
 
-    public void setAutor(String autor) {
+    public void setAutor(List<DatosAutor> autor) {
         this.autor = autor;
     }
 
-    public String getIdiomas() {
+    public List<String> getIdiomas() {
         return idiomas;
     }
 
-    public void setIdiomas(String idiomas) {
+    public void setIdiomas(List<String> idiomas) {
         this.idiomas = idiomas;
     }
 
@@ -60,6 +60,6 @@ public class Libros {
                   Idiomas: %s  
                   Descargas: %s
                 -------------------
-                """.formatted(titulo, autor, idiomas, descargas);
+                """.formatted(titulo, autor.get(0).nombre(), idiomas.get(0), descargas);
     }
 }
