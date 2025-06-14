@@ -1,10 +1,21 @@
 package com.gelse.literalura.model;
 
-import java.util.List;
+import jakarta.persistence.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Entity //se crea un tabla en la base de datos
+@Table(name = "libros") // se le da el nombre de libros a la tabla
 public class Libros {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //genera los valores del id automaticamente
+    private Long Id;
+    @Column(unique = true) //para queno se repitan los libros
     private String titulo;
-    private List<DatosAutor> autor;
+    @OneToMany(mappedBy = "libros", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Autor> autor;
+    @ElementCollection
     private List<String> idiomas;
     private Double descargas;
 
@@ -13,7 +24,7 @@ public class Libros {
 
     public Libros(DatosLibros datosLibros) {
         this.titulo = datosLibros.titulo();
-        this.autor = datosLibros.datosAutor();
+        this.autor = datosLibros.datosAutor().stream().map(d -> new Autor(d)).collect(Collectors.toList());
         this.idiomas = datosLibros.idiomas();
         this.descargas = datosLibros.descargas();
     }
@@ -27,11 +38,11 @@ public class Libros {
         this.titulo = titulo;
     }
 
-    public List<DatosAutor> getAutor() {
+    public List<Autor> getAutor() {
         return autor;
     }
 
-    public void setAutor(List<DatosAutor> autor) {
+    public void setAutor(List<Autor> autor) {
         this.autor = autor;
     }
 
@@ -60,6 +71,6 @@ public class Libros {
                   Idiomas: %s  
                   Descargas: %s
                 -------------------
-                """.formatted(titulo, autor.get(0).nombre(), idiomas.get(0), descargas);
+                """.formatted(titulo, autor.get(0).getNombre(), idiomas.get(0), descargas);
     }
 }

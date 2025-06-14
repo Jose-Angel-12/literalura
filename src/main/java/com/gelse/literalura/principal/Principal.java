@@ -1,8 +1,10 @@
 package com.gelse.literalura.principal;
 
+import com.gelse.literalura.model.Autor;
 import com.gelse.literalura.model.Datos;
 import com.gelse.literalura.model.DatosLibros;
 import com.gelse.literalura.model.Libros;
+import com.gelse.literalura.repository.LibroRepository;
 import com.gelse.literalura.service.ConsumoApi;
 import com.gelse.literalura.service.ConvierteDatos;
 
@@ -16,6 +18,11 @@ public class Principal {
     private ConsumoApi consumoApi = new ConsumoApi();
     private ConvierteDatos convierteDatos = new ConvierteDatos();
     private Scanner teclado = new Scanner(System.in);
+    private LibroRepository repository;
+
+    public Principal(LibroRepository repository){
+        this.repository = repository;
+    }
 
     public void muestraElMenu() {
         /*
@@ -77,7 +84,9 @@ public class Principal {
     private void buscarLibro() {
         DatosLibros datosLibros = getDatosLibros().get();
         Libros libros = new Libros(datosLibros);
-
+        //Autor autor = new Autor(datosLibros.datosAutor().get(0));
+        repository.save(libros);
         System.out.println(libros);
+        //System.out.println(autor);
     }
 }
