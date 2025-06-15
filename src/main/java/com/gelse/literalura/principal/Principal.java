@@ -8,9 +8,7 @@ import com.gelse.literalura.repository.LibroRepository;
 import com.gelse.literalura.service.ConsumoApi;
 import com.gelse.literalura.service.ConvierteDatos;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
@@ -20,7 +18,7 @@ public class Principal {
     private Scanner teclado = new Scanner(System.in);
     private LibroRepository repository;
 
-    public Principal(LibroRepository repository){
+    public Principal(LibroRepository repository) {
         this.repository = repository;
     }
 
@@ -84,9 +82,16 @@ public class Principal {
     private void buscarLibro() {
         DatosLibros datosLibros = getDatosLibros().get();
         Libros libros = new Libros(datosLibros);
-        //Autor autor = new Autor(datosLibros.datosAutor().get(0));
-        repository.save(libros);
-        System.out.println(libros);
-        //System.out.println(autor);
+        try {
+            //Autor autor = new Autor(datosLibros.datosAutor().get(0));
+            repository.save(libros);
+            System.out.println(libros);
+            //System.out.println(autor);
+        } catch (InputMismatchException w) {
+            repository.getReferenceById(libros.getId());
+            System.out.println(libros);
+        } catch (NoSuchElementException e) {
+            System.out.println("no se guarda un valor vacio en la DB");
+        }
     }
 }

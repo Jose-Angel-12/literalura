@@ -13,23 +13,36 @@ public class Libros {
     private Long Id;
     @Column(unique = true) //para queno se repitan los libros
     private String titulo;
+    private String idiomas;
+    private Double descargas;
     @OneToMany(mappedBy = "libros", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Autor> autor;
-    @ElementCollection
-    private List<String> idiomas;
-    private Double descargas;
 
     public Libros() {
     }
 
     public Libros(DatosLibros datosLibros) {
         this.titulo = datosLibros.titulo();
-        this.autor = datosLibros.datosAutor().stream().map(d -> new Autor(d)).collect(Collectors.toList());
-        this.idiomas = datosLibros.idiomas();
+        //creo la relacion de autores para el id libro_id
+        //si lo hago directamente no estaria ejecutanto setAutor() sino directamente autor lo cual es null
+        List<Autor> autores = datosLibros.datosAutor().stream().map(d -> new Autor(d)).collect(Collectors.toList());
+        this.setAutor(autores);
+
+        this.idiomas = datosLibros.idiomas().get(0);
         this.descargas = datosLibros.descargas();
     }
 
     //constructores
+
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
     public String getTitulo() {
         return titulo;
     }
@@ -43,14 +56,15 @@ public class Libros {
     }
 
     public void setAutor(List<Autor> autor) {
+        autor.forEach(a -> a.setLibros(this));// quiere decir que para cada autor tiene un id de un 1libro
         this.autor = autor;
     }
 
-    public List<String> getIdiomas() {
+    public String getIdiomas() {
         return idiomas;
     }
 
-    public void setIdiomas(List<String> idiomas) {
+    public void setIdiomas(String idiomas) {
         this.idiomas = idiomas;
     }
 
@@ -71,6 +85,6 @@ public class Libros {
                   Idiomas: %s  
                   Descargas: %s
                 -------------------
-                """.formatted(titulo, autor.get(0).getNombre(), idiomas.get(0), descargas);
+                """.formatted(titulo, autor.get(0).getNombre(), idiomas, descargas);
     }
 }

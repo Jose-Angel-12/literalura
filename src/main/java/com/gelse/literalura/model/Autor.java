@@ -12,6 +12,7 @@ public class Autor {
     private Integer fechaDeNacimiento;
     private Integer fechaDeFallecimiento;
     @ManyToOne()
+    @JoinColumn(name="libros_id")
     private Libros libros;
 
     public Autor() {
@@ -21,6 +22,14 @@ public class Autor {
         this.nombre = datosAutor.nombre();
         this.fechaDeNacimiento = datosAutor.fechaDeNacimeinto();
         this.fechaDeFallecimiento = datosAutor.fechaDeFallecimiento();
+    }
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
     }
 
     public Libros getLibros() {
