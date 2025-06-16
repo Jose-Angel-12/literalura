@@ -81,17 +81,16 @@ public class Principal {
 
     private void buscarLibro() {
         DatosLibros datosLibros = getDatosLibros().get();
-        Libros libros = new Libros(datosLibros);
-        try {
-            //Autor autor = new Autor(datosLibros.datosAutor().get(0));
-            repository.save(libros);
-            System.out.println(libros);
-            //System.out.println(autor);
-        } catch (InputMismatchException w) {
-            repository.getReferenceById(libros.getId());
-            System.out.println(libros);
-        } catch (NoSuchElementException e) {
-            System.out.println("no se guarda un valor vacio en la DB");
+        String titulo = datosLibros.titulo();
+
+        Optional<Libros> libroExistente = repository.findByTitulo(titulo);
+        if(libroExistente.isPresent()){
+            libroExistente.get();
+            System.out.println(libroExistente.get());
+        } else {
+            Libros libroNuevo = new Libros(datosLibros);
+            repository.save(libroNuevo);
+            System.out.println(libroNuevo);
         }
     }
 }
