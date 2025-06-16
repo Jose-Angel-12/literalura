@@ -7,12 +7,15 @@ import com.gelse.literalura.model.Libros;
 import com.gelse.literalura.repository.LibroRepository;
 import com.gelse.literalura.service.ConsumoApi;
 import com.gelse.literalura.service.ConvierteDatos;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
     private static final String URL_BASE = "https://gutendex.com/books/";
+    private static final Logger log = LoggerFactory.getLogger(Principal.class);
     private ConsumoApi consumoApi = new ConsumoApi();
     private ConvierteDatos convierteDatos = new ConvierteDatos();
     private Scanner teclado = new Scanner(System.in);
@@ -24,8 +27,8 @@ public class Principal {
 
     public void muestraElMenu() {
         /*
-                    2 - Listar libros registrados
-                    3 - Listar autores registrados
+
+
                     4 - Listar autores vivos en un determinado año
                     5 - Listar libros por idiomas
         */
@@ -34,7 +37,9 @@ public class Principal {
             var menu = "\n" + """
                     --------------------------------------
                     Elija una opción a través de su número:
-                    1 - Buscar libro por titulo 
+                    1 - Buscar libro por titulo
+                    2 - Listar libros registrados
+                    3 - Listar autores registrados
                     
                     0 - Salir
                     """;
@@ -46,7 +51,12 @@ public class Principal {
                 case 1:
                     buscarLibro();
                     break;
-
+                case 2:
+                    listarLibroRegistrados();
+                    break;
+                case 3:
+                    listarAutoresRegistrados();
+                    break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
                     break;
@@ -84,13 +94,21 @@ public class Principal {
         String titulo = datosLibros.titulo();
 
         Optional<Libros> libroExistente = repository.findByTitulo(titulo);
-        if(libroExistente.isPresent()){
-            libroExistente.get();
-            System.out.println(libroExistente.get());
+        if (libroExistente.isPresent()) {
+            System.out.println("Este libro ya se encuentra en la base de datos");
         } else {
             Libros libroNuevo = new Libros(datosLibros);
             repository.save(libroNuevo);
             System.out.println(libroNuevo);
         }
+    }
+
+    private void listarLibroRegistrados() {
+        List<Libros> listaDeLibros = repository.findAll();
+        listaDeLibros.forEach(System.out::println);
+    }
+
+    private void listarAutoresRegistrados() {
+
     }
 }
