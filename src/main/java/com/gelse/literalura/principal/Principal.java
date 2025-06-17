@@ -4,6 +4,7 @@ import com.gelse.literalura.model.Autor;
 import com.gelse.literalura.model.Datos;
 import com.gelse.literalura.model.DatosLibros;
 import com.gelse.literalura.model.Libros;
+import com.gelse.literalura.repository.AutorRepository;
 import com.gelse.literalura.repository.LibroRepository;
 import com.gelse.literalura.service.ConsumoApi;
 import com.gelse.literalura.service.ConvierteDatos;
@@ -11,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Principal {
     private static final String URL_BASE = "https://gutendex.com/books/";
@@ -19,10 +19,12 @@ public class Principal {
     private ConsumoApi consumoApi = new ConsumoApi();
     private ConvierteDatos convierteDatos = new ConvierteDatos();
     private Scanner teclado = new Scanner(System.in);
-    private LibroRepository repository;
+    private LibroRepository libroRepository;
+    private AutorRepository autorRepository;
 
-    public Principal(LibroRepository repository) {
-        this.repository = repository;
+    public Principal(LibroRepository libroRepository, AutorRepository autorRepository) {
+        this.libroRepository = libroRepository;
+        this.autorRepository = autorRepository;
     }
 
     public void muestraElMenu() {
@@ -93,22 +95,23 @@ public class Principal {
         DatosLibros datosLibros = getDatosLibros().get();
         String titulo = datosLibros.titulo();
 
-        Optional<Libros> libroExistente = repository.findByTitulo(titulo);
+        Optional<Libros> libroExistente = libroRepository.findByTitulo(titulo);
         if (libroExistente.isPresent()) {
             System.out.println("Este libro ya se encuentra en la base de datos");
         } else {
             Libros libroNuevo = new Libros(datosLibros);
-            repository.save(libroNuevo);
+            libroRepository.save(libroNuevo);
             System.out.println(libroNuevo);
         }
     }
 
     private void listarLibroRegistrados() {
-        List<Libros> listaDeLibros = repository.findAll();
+        List<Libros> listaDeLibros = libroRepository.obtenerLibrosRegistrados();
         listaDeLibros.forEach(System.out::println);
     }
 
     private void listarAutoresRegistrados() {
-
+        List<Autor> autores = autorRepository.obtenerAutoresRegistrados();
+        autores.forEach(System.out::println);
     }
 }
