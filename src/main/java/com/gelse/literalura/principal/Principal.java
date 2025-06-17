@@ -31,7 +31,7 @@ public class Principal {
         /*
 
 
-                    4 - Listar autores vivos en un determinado año
+
                     5 - Listar libros por idiomas
         */
         var opcion = -1;
@@ -42,6 +42,7 @@ public class Principal {
                     1 - Buscar libro por titulo
                     2 - Listar libros registrados
                     3 - Listar autores registrados
+                    4 - Listar autores vivos en un determinado año
                     
                     0 - Salir
                     """;
@@ -58,6 +59,9 @@ public class Principal {
                     break;
                 case 3:
                     listarAutoresRegistrados();
+                    break;
+                case 4:
+                    listarAutoresVivoPorAnho();
                     break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
@@ -113,5 +117,12 @@ public class Principal {
     private void listarAutoresRegistrados() {
         List<Autor> autores = autorRepository.obtenerAutoresRegistrados();
         autores.forEach(System.out::println);
+    }
+
+    private void listarAutoresVivoPorAnho(){
+        System.out.println("Escriba el año del cual quiere ver los autores vivos");
+        Integer anho = teclado.nextInt();
+        List<Autor> autoresVivos = autorRepository.obtenerAutoresVivosPorAnho(anho);
+        autoresVivos.forEach(System.out::println);
     }
 }
