@@ -29,7 +29,7 @@ public class Principal {
 
     public void muestraElMenu() {
         /*
-                    5 - Listar libros por idiomas
+                    opciones del menú
         */
         var opcion = -1;
         while (opcion != 0) {
@@ -40,10 +40,10 @@ public class Principal {
                     2 - Listar libros registrados
                     3 - Listar autores registrados
                     4 - Listar autores vivos en un determinado año
+                    5 - Listar libros por idiomas
                     
                     0 - Salir
                     """;
-
 
             System.out.println(menu);
             try {
@@ -62,6 +62,9 @@ public class Principal {
                         break;
                     case 4:
                         listarAutoresVivoPorAnho();
+                        break;
+                    case 5:
+                        listarLibrosPorIdiomas();
                         break;
                     case 0:
                         System.out.println("Cerrando la aplicación...");
@@ -132,5 +135,16 @@ public class Principal {
         teclado.nextLine();
         List<Autor> autoresVivos = autorRepository.obtenerAutoresVivosPorAnho(anho);
         autoresVivos.forEach(System.out::println);
+    }
+
+    private void listarLibrosPorIdiomas(){
+        System.out.println("Ingrese el idioma para buscar  los libros:");
+        System.out.println("es - español");
+        System.out.println("en - ingles");
+        System.out.println("fr - frances");
+        System.out.println("pt - portugués");
+        String idioma = teclado.nextLine();
+        List<Libros> listaLibros = libroRepository.obtenerLibrosPorIdiomas(idioma);
+        listaLibros.forEach(System.out::println);
     }
 }

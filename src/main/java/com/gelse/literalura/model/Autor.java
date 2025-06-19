@@ -74,7 +74,10 @@ public class Autor {
                Nombre: %s
                Fecha de nacimiento: %s
                Fecha de fallecimiento %s
+               Libro: %s
                -------------------------------
-                """.formatted(nombre, fechaDeNacimiento != null ? fechaDeNacimiento : "Desconocida", fechaDeFallecimiento != null ? fechaDeFallecimiento : "Desconocida");
+                """.formatted(nombre, fechaDeNacimiento != null ? fechaDeNacimiento : "Desconocida",
+                fechaDeFallecimiento != null ? fechaDeFallecimiento : "Desconocida",
+                getLibros().getTitulo());
     }
 }
