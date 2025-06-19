@@ -2,6 +2,8 @@ package com.gelse.literalura.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name="autores")
 public class Autor {
@@ -63,7 +65,7 @@ public class Autor {
 
     public void setFechaDeFallecimiento(Integer fechaDeFallecimiento) {
         this.fechaDeFallecimiento = fechaDeFallecimiento;
-    }
+    } 
 
     @Override
     public String toString() {
