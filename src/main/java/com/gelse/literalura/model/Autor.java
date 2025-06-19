@@ -65,7 +65,7 @@ public class Autor {
 
     public void setFechaDeFallecimiento(Integer fechaDeFallecimiento) {
         this.fechaDeFallecimiento = fechaDeFallecimiento;
-    } 
+    }
 
     @Override
     public String toString() {
@@ -75,6 +75,6 @@ public class Autor {
                Fecha de nacimiento: %s
                Fecha de fallecimiento %s
                -------------------------------
-                """.formatted(nombre, fechaDeNacimiento, fechaDeFallecimiento);
+                """.formatted(nombre, fechaDeNacimiento != null ? fechaDeNacimiento : "Desconocida", fechaDeFallecimiento != null ? fechaDeFallecimiento : "Desconocida");
     }
 }

@@ -25,7 +25,7 @@ public class Libros {
         this.titulo = datosLibros.titulo();
         //creo la relacion de autores para el id libro_id
         //si lo hago directamente no estaria ejecutanto setAutor() sino directamente autor lo cual es null
-        List<Autor> autores = datosLibros.datosAutor().stream().map(d -> new Autor(d)).collect(Collectors.toList());
+        List<Autor> autores = datosLibros.datosAutor().stream().map(d -> new Autor(d)).limit(01).collect(Collectors.toList());
         this.setAutor(autores);
 
         this.idiomas = datosLibros.idiomas().get(0);
@@ -78,7 +78,8 @@ public class Libros {
 
     @Override
     public String toString() {
-        return """
+        try{
+            return """
                 ------ LIBRO ------
                   Titulo: %s   
                   Autores: %s 
@@ -86,5 +87,15 @@ public class Libros {
                   Descargas: %s
                 -------------------
                 """.formatted(titulo, autor.get(0).getNombre(), idiomas, descargas);
+        }catch (IndexOutOfBoundsException e){
+            return """
+                ------ LIBRO ------
+                  Titulo: %s   
+                  Autores: %s 
+                  Idiomas: %s  
+                  Descargas: %s
+                -------------------
+                """.formatted(titulo, "Desconocidos", idiomas, descargas);
+        }
     }
 }

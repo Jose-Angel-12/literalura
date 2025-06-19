@@ -29,9 +29,6 @@ public class Principal {
 
     public void muestraElMenu() {
         /*
-
-
-
                     5 - Listar libros por idiomas
         */
         var opcion = -1;
@@ -46,38 +43,44 @@ public class Principal {
                     
                     0 - Salir
                     """;
-            System.out.println(menu);
-            opcion = teclado.nextInt();
-            teclado.nextLine();
 
-            switch (opcion) {
-                case 1:
-                    buscarLibro();
-                    break;
-                case 2:
-                    listarLibroRegistrados();
-                    break;
-                case 3:
-                    listarAutoresRegistrados();
-                    break;
-                case 4:
-                    listarAutoresVivoPorAnho();
-                    break;
-                case 0:
-                    System.out.println("Cerrando la aplicación...");
-                    break;
-                default:
-                    System.out.println("Opción inválida");
+
+            System.out.println(menu);
+            try {
+                opcion = teclado.nextInt();
+                teclado.nextLine();
+
+                switch (opcion) {
+                    case 1:
+                        buscarLibro();
+                        break;
+                    case 2:
+                        listarLibroRegistrados();
+                        break;
+                    case 3:
+                        listarAutoresRegistrados();
+                        break;
+                    case 4:
+                        listarAutoresVivoPorAnho();
+                        break;
+                    case 0:
+                        System.out.println("Cerrando la aplicación...");
+                        break;
+                    default:
+                        System.out.println("Opción inválida");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("        >>>>> Opción invalida <<<<<");
+                teclado.nextLine();
             }
         }
-
     }
 
     private Optional<DatosLibros> getDatosLibros() {
         System.out.println("Escriba el nombre del libro que desea buscar");
         String tituloLibro = teclado.nextLine();
         //obtengo los datos de la api
-        String json = consumoApi.obtenerDatosApi(URL_BASE + "?Search=" + tituloLibro.replace(" ", "+"));
+        String json = consumoApi.obtenerDatosApi(URL_BASE + "?search=" + tituloLibro.replace(" ", "%20"));
         // System.out.println(json);
         Datos datos = convierteDatos.obtenerDatos(json, Datos.class);
 //        System.out.println(datos);
@@ -90,22 +93,26 @@ public class Principal {
             // System.out.println("Libro encontrado:");
 //            System.out.println(libroBuscado);
         } else {
-            System.out.println("Libro no encontrado");
+            System.out.println(">>>>>> Libro no encontrado <<<<<<");
         }
         return libroBuscado;
     }
 
     private void buscarLibro() {
-        DatosLibros datosLibros = getDatosLibros().get();
-        String titulo = datosLibros.titulo();
+        try {
+            DatosLibros datosLibros = getDatosLibros().get();
+            String titulo = datosLibros.titulo();
 
-        Optional<Libros> libroExistente = libroRepository.findByTitulo(titulo);
-        if (libroExistente.isPresent()) {
-            System.out.println("Este libro ya se encuentra en la base de datos");
-        } else {
-            Libros libroNuevo = new Libros(datosLibros);
-            libroRepository.save(libroNuevo);
-            System.out.println(libroNuevo);
+            Optional<Libros> libroExistente = libroRepository.findByTitulo(titulo);
+            if (libroExistente.isPresent()) {
+                System.out.println("Este libro ya se encuentra en la base de datos");
+            } else {
+                Libros libroNuevo = new Libros(datosLibros);
+                libroRepository.save(libroNuevo);
+                System.out.println(libroNuevo);
+            }
+        } catch (NoSuchElementException i) {
+            System.out.println(">>>>>> No es posible hacer una busqueda con este valor <<<<<<");
         }
     }
 
@@ -119,9 +126,10 @@ public class Principal {
         autores.forEach(System.out::println);
     }
 
-    private void listarAutoresVivoPorAnho(){
+    private void listarAutoresVivoPorAnho() {
         System.out.println("Escriba el año del cual quiere ver los autores vivos");
         Integer anho = teclado.nextInt();
+        teclado.nextLine();
         List<Autor> autoresVivos = autorRepository.obtenerAutoresVivosPorAnho(anho);
         autoresVivos.forEach(System.out::println);
     }
