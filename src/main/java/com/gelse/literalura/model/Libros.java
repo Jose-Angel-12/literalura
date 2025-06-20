@@ -25,16 +25,17 @@ public class Libros {
         this.titulo = datosLibros.titulo();
         //creo la relacion de autores para el id libro_id
         //si lo hago directamente no estaria ejecutanto setAutor() sino directamente autor lo cual es null
-        List<Autor> autores = datosLibros.datosAutor().stream().map(d -> new Autor(d)).limit(01).collect(Collectors.toList());
+        List<Autor> autores = datosLibros.datosAutor().stream().map(d -> new Autor(d)).limit(0).collect(Collectors.toList());
         this.setAutor(autores);
-
-        this.idiomas = datosLibros.idiomas().get(0);
+        if (datosLibros.idiomas() != null && !datosLibros.idiomas().isEmpty()) {
+            this.idiomas = datosLibros.idiomas().get(0).trim();
+        } else {
+            this.idiomas = "Desconocido"; // O maneja como prefieras
+        }
         this.descargas = datosLibros.descargas();
     }
 
     //constructores
-
-
     public Long getId() {
         return Id;
     }

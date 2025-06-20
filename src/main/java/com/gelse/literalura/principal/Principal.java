@@ -1,9 +1,6 @@
 package com.gelse.literalura.principal;
 
-import com.gelse.literalura.model.Autor;
-import com.gelse.literalura.model.Datos;
-import com.gelse.literalura.model.DatosLibros;
-import com.gelse.literalura.model.Libros;
+import com.gelse.literalura.model.*;
 import com.gelse.literalura.repository.AutorRepository;
 import com.gelse.literalura.repository.LibroRepository;
 import com.gelse.literalura.service.ConsumoApi;
@@ -137,14 +134,21 @@ public class Principal {
         autoresVivos.forEach(System.out::println);
     }
 
-    private void listarLibrosPorIdiomas(){
+    private void listarLibrosPorIdiomas() {
         System.out.println("Ingrese el idioma para buscar  los libros:");
         System.out.println("es - español");
         System.out.println("en - ingles");
         System.out.println("fr - frances");
         System.out.println("pt - portugués");
         String idioma = teclado.nextLine();
-        List<Libros> listaLibros = libroRepository.obtenerLibrosPorIdiomas(idioma);
-        listaLibros.forEach(System.out::println);
+
+        try {
+            Idioma lenguaje = Idioma.fromString(idioma);
+            List<Libros> listaLibros = libroRepository.obtenerLibrosPorIdiomas(lenguaje);
+            listaLibros.forEach(System.out::println);
+        } catch (IllegalArgumentException e) {
+            System.out.println("<<<<<< Ingrese un valor valido >>>>>>");
+        }
+
     }
 }
